@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>ÔNIX</title>
+    <meta name="author" content="Natalia Selestrini Dias">
+    <meta name="description" content="assignment3">
+    <link rel="stylesheet" href="css/styles.css" />
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+</head>
+
+<body>
+    <nav>
+        <div id="title">
+            <h1>Ônix</h1>
+            <h2>the cat</h2>
+        </div>
+
+        <div id="options">
+            <button id="bcolor1" onclick="changeImg1()"></button>
+            <button id="bcolor2" onclick="changeImg2()"></button>
+            <button id="bcolor3" onclick="changeImg3()"></button>
+            <button id="bcolor4" onclick="changeImg4()"></button>
+
+            <script>
+                function changeImg1() {
+                    var imgTamag = document.getElementById('tamag');
+                    imgTamag.src = "images/onix1.svg";
+                }
+                function changeImg2() {
+                    var imgTamag = document.getElementById('tamag');
+                    imgTamag.src = "images/onix2.svg";
+                }
+                function changeImg3() {
+                    var imgTamag = document.getElementById('tamag');
+                    imgTamag.src = "images/onix3.svg";
+                }
+                function changeImg4() {
+                    var imgTamag = document.getElementById('tamag');
+                    imgTamag.src = "images/onix4.svg";
+                }
+            </script>
+            <br />
+
+            <button id="button1" onclick="addInstructions()">INSTRUCTIONS</button>
+            <div id="instructionsWrapper" style="display:none;">
+                <div id="instructions">
+                    <button id="closeInstructions" onclick="closeInstructions()">X</button>
+                    <ul id="instructionsList">
+                        <li>Click on the 'cat's paw' to start</li>
+                        <li>Click on 'menu' to see all the options to interact with Ônix</li>
+                        <li>Use the buttons to 'left' and 'right' to navigate through the menu options</li>
+                        <li>Use enter to select the option on the screen</li>
+                        <br />
+                        <li id="last">Enjoy what Ônix can do and have fun!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <script>
+                function addInstructions() {
+                    document.getElementById('instructionsWrapper').style.display = 'block';
+                }
+
+                function closeInstructions() {
+                    document.getElementById('instructionsWrapper').style.display = 'none';
+                }
+            </script>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <img class="action" id="images" src="gifs/hi.gif" alt="cat gif" onclick="changeIntro()">
+
+            <img id="tamag" src="images/onix1.svg" usemap="#image-map">
+            <map name="image-map">
+                <area target="_self" alt="left" href="#" shape="poly" coords="101,376,116,479,41,433" onclick="goLeft()"
+                    id="left" aria-disabled="false">
+                <area target="_self" alt="right" href="#" shape="poly" coords="547,345,545,452,610,400"
+                    onclick="goRight()" id="right" aria-disabled="false">
+                <area target="_self" alt="return" href="#" shape="poly" coords="201,537,233,590,285,553"
+                    onclick="goReturn()" id="return" aria-disabled="false">
+                <area target="_self" alt="enter" href="#" shape="poly" coords="300,557,351,599,390,548"
+                    onclick="goEnter()" id="enter" aria-disabled="false">
+                <area target="_self" alt="menu" href="#" shape="poly" coords="399,548,452,575,469,517"
+                    onclick="goMenu()" id="menu" aria-disabled="false">
+            </map>
+        </div>
+
+        <script>
+            var imagesMenu = [
+                //MENU
+                "gifs/menuEat.gif", //0
+                "gifs/menuPet.gif",
+                "gifs/menuSleep.gif",
+                "gifs/menuPlay.gif",
+                "gifs/menuClean.gif",
+                "gifs/menuSpa.gif",
+                "gifs/menuStudy.gif",
+                "gifs/menuWork.gif", //7
+            ]
+
+            var imagesMenuEat = [
+                // submenu EAT
+                "gifs/eatHamb1.gif",
+                "gifs/eatPizza1.gif",
+                "gifs/eatCookie1.gif",
+            ]
+
+            var imagesArray = []
+            var unlockImgMap = true;
+
+            var hiImageClicked = false;
+            function changeIntro() {
+                hiImageClicked = true;
+                var currentImageSrc = document.getElementById('images').src;
+                var imageName = getImageName(currentImageSrc);
+                if (imageName == "gifs/hi.gif") {
+                    document.getElementById("images").src = "gifs/base.gif";
+                }
+            }
+
+            function goReturn() {
+                if (unlockImgMap) {
+                    if (hiImageClicked) {
+                        document.getElementById("images").src = "gifs/base.gif";
+                        goMenuClicked = false;
+                    }
+                }
+            }
+
+            var goMenuClicked = false;
+            function goMenu() {
+                if (unlockImgMap) {
+                    imagesArray = imagesMenu;
+                    if (hiImageClicked) {
+                        goMenuClicked = true;
+                        document.getElementById("images").src = imagesArray[0];
+                    }
+                }
+            }
+
+            function goEnter() {
+                if (unlockImgMap) {
+                    if (goMenuClicked) {
+                        var currentImageSrc = document.getElementById('images').src;
+                        var imageName = getImageName(currentImageSrc);
+                        currentIndex = imagesArray.indexOf(imageName);
+
+                        switch (imageName) {
+                            case "gifs/menuEat.gif": {
+                                imagesArray = imagesMenuEat;
+                                document.getElementById("images").src = imagesArray[0];
+                                break;
+                            }
+                            case "gifs/eatHamb1.gif": {
+                                document.getElementById("images").src = "gifs/hamb.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/eatPizza1.gif": {
+                                document.getElementById("images").src = "gifs/pizza.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/eatCookie1.gif": {
+                                document.getElementById("images").src = "gifs/cookie.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/menuPet.gif": {
+                                document.getElementById("images").src = "gifs/pet.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/pet2.gif"; }, 3000);
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/menuSleep.gif": {
+                                document.getElementById("images").src = "gifs/sleep.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/menuPlay.gif": {
+                                document.getElementById("images").src = "gifs/play.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/menuClean.gif": {
+                                document.getElementById("images").src = "gifs/clean.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/clean2.gif"; }, 3000);
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/menuSpa.gif": {
+                                document.getElementById("images").src = "gifs/spa.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/menuStudy.gif": {
+                                document.getElementById("images").src = "gifs/study.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            } case "gifs/menuWork.gif": {
+                                document.getElementById("images").src = "gifs/work.gif";
+                                unlockImgMap = false;
+                                setTimeout(() => { document.getElementById("images").src = "gifs/base.gif"; unlockImgMap = true }, 4000);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            function getImageName(imagePath) {
+                const pathPart = imagePath.split('/');
+                const imgFullName = pathPart[pathPart.length - 2];
+                const imgFullName1 = pathPart[pathPart.length - 1];
+                return imgFullName + '/' + imgFullName1;
+            }
+
+            function goRight() {
+                if (unlockImgMap) {
+                    if (goMenuClicked) {
+                        var currentImageSrc = document.getElementById('images').src;
+                        var imageName = getImageName(currentImageSrc);
+                        currentIndex = imagesArray.indexOf(imageName);
+                        if (currentIndex == imagesArray.length - 1) {
+                            currentIndex = -1;
+                        }
+                        document.getElementById("images").src = imagesArray[currentIndex + 1];
+                    }
+                }
+            }
+
+            function goLeft() {
+                if (unlockImgMap) {
+                    if (goMenuClicked) {
+                        var currentImageSrc = document.getElementById('images').src;
+                        var imageName = getImageName(currentImageSrc);
+                        currentIndex = imagesArray.indexOf(imageName);
+                        if (currentIndex == 0) {
+                            currentIndex = imagesArray.length;
+                        }
+                        document.getElementById("images").src = imagesArray[currentIndex - 1];
+                    }
+                }
+            }
+        </script>
+    </main>
+
+    <footer>
+        <p><small>© Natalia Selestrini Dias | <a href="https://giphy.com/pusheen">All GIFs: PUSHEEN</a></small></p>
+    </footer>
+</body>
+
+</html>
